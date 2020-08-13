@@ -1,0 +1,47 @@
+{
+    "_buyToken": "KIN",
+    "buyBands": [
+        {
+            "minMargin": 0.005,
+            "avgMargin": 0.01,
+            "maxMargin": 0.02,
+            "minAmount": 0.00025,
+            "avgAmount": 0.00050,
+            "maxAmount": 0.001,
+            "dustCutoff": 0.0
+        },
+        {
+            "minMargin": 0.02,
+            "avgMargin": 0.025,
+            "maxMargin": 0.03,
+            "minAmount": 0.00025,
+            "avgAmount": 0.00050,
+            "maxAmount": 0.001,
+            "dustCutoff": 0.0
+        }
+    ],
+    "buyLimits": [],
+
+    "_sellToken": "ETH",
+    "sellBands": [
+        {
+            "minMargin": 0.005,
+            "avgMargin": 0.01,
+            "maxMargin": 0.02,
+            "minAmount": 10000,
+            "avgAmount": 50000,
+            "maxAmount": 100000,
+            "dustCutoff": 0.0
+        },
+        {
+            "minMargin": 0.02,
+            "avgMargin": 0.025,
+            "maxMargin": 0.05,
+            "minAmount": 10000,
+            "avgAmount": 50000,
+            "maxAmount": 100000,
+            "dustCutoff": 0.0
+        }
+    ],
+    "sellLimits": []
+}

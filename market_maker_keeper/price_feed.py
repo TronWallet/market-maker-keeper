@@ -19,6 +19,7 @@ import json
 import logging
 import threading
 import time
+import requests
 from typing import Optional, List
 
 import websocket
@@ -189,6 +190,33 @@ class WebSocketPriceFeed(PriceFeed):
         return Price(buy_price=buy_price, sell_price=sell_price)
 
 
+class HitbtcPriceFeed:
+    def __init__(self):
+        pass
+
+    def get_price(self):
+        url = "https://api.hitbtc.com/api/2/public/ticker/KINETH"
+        data = requests.get(url).json()
+
+        try:
+            if 'bid' in data:
+                buy_price = Wad.from_number(data['bid'])
+            else:
+                buy_price = None
+        except:
+            buy_price = None
+
+        try:
+            if 'ask' in data:
+                sell_price = Wad.from_number(data['ask'])
+            else:
+                sell_price = None
+        except:
+            sell_price = None
+
+        return Price(buy_price=buy_price, sell_price=sell_price)
+
+
 class AveragePriceFeed(PriceFeed):
     def __init__(self, feeds: List[PriceFeed]):
         assert(isinstance(feeds, list))
@@ -323,6 +351,9 @@ class PriceFeedFactory:
             socket_feed = ExpiringFeed(socket_feed, price_feed_expiry_argument)
 
             price_feed = WebSocketPriceFeed(socket_feed)
+
+        elif price_feed_argument == 'hitbtc':
+            price_feed = HitbtcPriceFeed()
 
         else:
             raise Exception(f"'--price-feed {price_feed_argument}' unknown")
