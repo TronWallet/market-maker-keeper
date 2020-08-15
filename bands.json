@@ -1,5 +1,5 @@
 {
-    "_buyToken": "KIN",
+    "_buyToken": "DICE",
     "buyBands": [
         {
             "minMargin": 0.005,
@@ -22,7 +22,7 @@
     ],
     "buyLimits": [],
 
-    "_sellToken": "ETH",
+    "_sellToken": "TRX",
     "sellBands": [
         {
             "minMargin": 0.005,

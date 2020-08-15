@@ -217,53 +217,6 @@ class HitbtcPriceFeed:
         return Price(buy_price=buy_price, sell_price=sell_price)
 
 
-class TronTradePriceFeed:
-    def __init__(self):
-        pass
-
-    def get_price(self):
-        # url = "https://api.hitbtc.com/api/2/public/ticker/KINETH"
-        # data = requests.get(url).json()
-
-        headers = {
-            "accept": "*/*",
-            "accept-language": "en-US,en;q=0.9,pt;q=0.8",
-            "content-type": "application/json",
-            "sec-fetch-dest": "empty",
-            "sec-fetch-mode": "cors",
-            "sec-fetch-site": "same-origin"
-        }
-        exchange_data_query = "[{\"operationName\":null,\"variables\":{},\"query\":\"{\\n  exchanges {\\n    id\\n    stats {\\n      h24_price\\n      high\\n      low\\n      volume\\n      volumeTrx\\n      h24_change\\n      lastPrice\\n      __typename\\n    }\\n    icon\\n    buyAssetName\\n    sellAssetName\\n    tokenTypeA\\n    tokenIdA\\n    tokenTypeB\\n    tokenIdB\\n    tokenDecimalsA\\n    tokenDecimalsB\\n    site\\n    listed\\n    __typename\\n  }\\n}\\n\"},{\"operationName\":null,\"variables\":{},\"query\":\"{\\n  stats {\\n    traders24hActive\\n    volume24hTrx\\n    __typename\\n  }\\n}\\n\"}]"
-
-        data = "[{\"operationName\":null,\"variables\":{},\"query\":\"{\\n  exchange(id: 47) {\\n    orderBook(limit: 100) {\\n      totalBuy\\n      totalSell\\n      buy {\\n        price\\n        totalAmount\\n        __typename\\n      }\\n      sell {\\n        price\\n        totalAmount\\n        __typename\\n      }\\n      __typename\\n    }\\n    __typename\\n  }\\n}\\n\"},{\"operationName\":\"latestTransactions\",\"variables\":{\"exchangeId\":47},\"query\":\"query latestTransactions($exchangeId: ID!) {\\n  exchange(id: $exchangeId) {\\n    history(limit: 50) {\\n      id\\n      side\\n      price\\n      filled\\n      createdAt\\n      marketId\\n      txId\\n      __typename\\n    }\\n    __typename\\n  }\\n}\\n\"}]"
-
-        r = requests.post("https://trontrade.io/graphql", headers=headers, data=data)
-        resp = r.json()
-
-        buyPrice = resp[0]['data']['exchange']['orderBook']['buy'][0]['price']
-        sellPrice = resp[0]['data']['exchange']['orderBook']['sell'][-1]['price']
-
-        try:
-            if 'bid' in data:
-                buy_price = buyPrice
-                # buy_price = Wad.from_number(data['bid'])
-            else:
-                buy_price = None
-        except:
-            buy_price = None
-
-        try:
-            if 'ask' in data:
-                sell_price = sellPrice
-                # sell_price = Wad.from_number(data['ask'])
-            else:
-                sell_price = None
-        except:
-            sell_price = None
-
-        return Price(buy_price=buy_price, sell_price=sell_price)
-
-
 class AveragePriceFeed(PriceFeed):
     def __init__(self, feeds: List[PriceFeed]):
         assert(isinstance(feeds, list))
@@ -401,9 +354,6 @@ class PriceFeedFactory:
 
         elif price_feed_argument == 'hitbtc':
             price_feed = HitbtcPriceFeed()
-
-        elif price_feed_argument == 'trontrade':
-            price_feed = TronTradePriceFeed()
 
         else:
             raise Exception(f"'--price-feed {price_feed_argument}' unknown")
